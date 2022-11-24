@@ -4,7 +4,6 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from utils.serializers import ReadOnlyRecipeSerializer
-
 from .models import Subscription
 
 User = get_user_model()

@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from recipes.models import RecipeIngredient
 
 
-def user_related_field_handler(
+def alter_model_related_with_user(
         request, field_name, instance,
         relation_model_cls, relation_szr_cls, instance_szr_cls
 ):
@@ -19,14 +19,14 @@ def user_related_field_handler(
             data=data, context=szr_context
         )
 
-        if related_instance_szr.is_valid(raise_exception=True):
-            related_instance_szr.save()
-            user_serializer = instance_szr_cls(
-                instance=instance, context=szr_context
-            )
-            return Response(
-                user_serializer.data, status=status.HTTP_200_OK
-            )
+        related_instance_szr.is_valid(raise_exception=True)
+        related_instance_szr.save()
+        user_serializer = instance_szr_cls(
+            instance=instance, context=szr_context
+        )
+        return Response(
+            user_serializer.data, status=status.HTTP_200_OK
+        )
 
     filter_params = {'user': user, field_name: instance.pk}
     relation_model_cls.objects.filter(**filter_params).delete()

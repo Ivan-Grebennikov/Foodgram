@@ -1,4 +1,3 @@
-
 from django.db.models import Exists, OuterRef
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
@@ -7,8 +6,7 @@ from rest_framework.decorators import action
 
 from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from utils.serializers import ReadOnlyRecipeSerializer
-from utils.services import create_shopping_cart, user_related_field_handler
-
+from utils.services import alter_model_related_with_user, create_shopping_cart
 from .filters import IngredientsSearchFilter, RecipesFilter
 from .permissions import RecipePermissions
 from .serializers import (
@@ -67,8 +65,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=('POST', 'DELETE'),
             permission_classes=(permissions.IsAuthenticated,))
     def favorite(self, request, pk):
-
-        return user_related_field_handler(
+        return alter_model_related_with_user(
             request=request,
             field_name='recipe',
             instance=self.get_object(),
@@ -80,8 +77,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=('POST', 'DELETE'),
             permission_classes=(permissions.IsAuthenticated,))
     def shopping_cart(self, request, pk):
-
-        return user_related_field_handler(
+        return alter_model_related_with_user(
             request=request,
             field_name='recipe',
             instance=self.get_object(),
@@ -94,7 +90,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
             permission_classes=(permissions.IsAuthenticated,),
             serializer_class=ReadOnlyRecipeSerializer)
     def download_shopping_cart(self, request):
-
         response = HttpResponse(
             create_shopping_cart(request.user),
             content_type='text/plain; charset=UTF-8'

@@ -2,8 +2,7 @@ from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from utils.services import user_related_field_handler
-
+from utils.services import alter_model_related_with_user
 from .models import Subscription, User
 from .serializers import FollowingUserSerializer, SubscriptionSerializer
 
@@ -14,8 +13,7 @@ class SubscriptionViewSet(viewsets.GenericViewSet):
     @action(detail=True, methods=('POST', 'DELETE'),
             permission_classes=(permissions.IsAuthenticated,))
     def subscribe(self, request, pk):
-
-        return user_related_field_handler(
+        return alter_model_related_with_user(
             request=request,
             field_name='following',
             instance=self.get_object(),
@@ -29,7 +27,6 @@ class SubscriptionViewSet(viewsets.GenericViewSet):
             serializer_class=FollowingUserSerializer)
     def subscriptions(self, request):
         user = request.user
-
         followings = User.objects.filter(
             pk__in=Subscription.objects.filter(
                 user=user).values_list('following', flat=True)
