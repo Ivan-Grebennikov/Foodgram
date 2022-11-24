@@ -6,8 +6,11 @@ services:
       context: ../backend
       dockerfile: Dockerfile
     volumes:
+      - ../data/:/data/
       - static_value:/app/static/
       - media_value:/app/media/
+    env_file:
+      - ./.env
   frontend:
     build:
       context: ../frontend

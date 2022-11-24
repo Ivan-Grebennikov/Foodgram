@@ -1,5 +1,8 @@
 from django.urls import include, path
 from djoser.views import UserViewSet
+from rest_framework.routers import DefaultRouter
+
+from .views import SubscriptionViewSet
 
 app_name = 'users'
 
@@ -27,7 +30,15 @@ users_patterns = [
     )
 ]
 
+router_subscription = DefaultRouter()
+
+router_subscription.register(
+    'users', SubscriptionViewSet, basename='subscriptions'
+)
+
+
 urlpatterns = [
     path('auth/', include(auth_patterns)),
     path('users/', include(users_patterns)),
+    path('', include(router_subscription.urls)),
 ]

@@ -3,9 +3,12 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-wvmy15xk2o9&5&$*%uopxvf%j3o9%0y7jtpx+$_!#ll7xug$pw'
+SECRET_KEY = os.getenv(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-wvmy15xk2o9&5&$*%uopxvf%j3o9%0y7jtpx+$_!#ll7xug$pw'
+)
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -23,6 +26,7 @@ INSTALLED_APPS = [
     'users',
     'recipes',
     'api',
+    'utils',
 ]
 
 MIDDLEWARE = [

@@ -1,10 +1,19 @@
-import base64
 from collections import defaultdict
 
 from django.contrib.auth import get_user_model
-from django.core.files.base import ContentFile
-from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
+from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
+from rest_framework.generics import get_object_or_404
+from rest_framework.validators import UniqueTogetherValidator
+
+from recipes.models import (
+    Favorite,
+    Ingredient,
+    Recipe,
+    RecipeIngredient,
+    ShoppingCart,
+    Tag,
+)
 from users.serializers import UserSerializer
 
 User = get_user_model()
@@ -47,17 +56,6 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
             'id', 'name', 'measurement_unit', 'amount'
         )
         model = RecipeIngredient
-
-
-class Base64ImageField(serializers.ImageField):
-    def to_internal_value(self, data):
-        if isinstance(data, str) and data.startswith('data:image'):
-            format, imgstr = data.split(';base64,')
-            ext = format.split('/')[-1]
-
-            data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
-
-        return super().to_internal_value(data)
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -104,13 +102,26 @@ class RecipeSerializer(serializers.ModelSerializer):
             if amount is None:
                 errors['ingredients'].append('Missing field \'amount\'.')
                 continue
-            if not amount.isnumeric():
+
+            if type(amount) not in (int, str):
                 errors['ingredients'].append(
-                    'Missing \'amount\' must be a positive number.'
+                    'Field \'amount\' must be a number.'
                 )
                 continue
 
-        if len(errors) > 0:
+            if type(amount) == str and not amount.isdigit():
+                errors['ingredients'].append(
+                    'Field \'amount\' must be a number.'
+                )
+                continue
+
+            if int(amount) <= 0:
+                errors['ingredients'].append(
+                    'Field \'amount\' must be greater than 0.'
+                )
+                continue
+
+        if errors:
             raise serializers.ValidationError(detail=errors)
 
     def validate_tags(self, tags_data):
@@ -129,7 +140,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                     f'Tag with id = {tag_id} not found.'
                 )
 
-        if len(errors) > 0:
+        if errors:
             raise serializers.ValidationError(detail=errors)
 
     def create(self, validated_data):
@@ -142,14 +153,21 @@ class RecipeSerializer(serializers.ModelSerializer):
 
         recipe = Recipe.objects.create(**validated_data)
 
+        recipe_ingredients = []
+
         for ingredient_data in ingredients_data:
-            ingredient = Ingredient.objects.get(
-                pk=ingredient_data['id']
+            ingredient = get_object_or_404(
+                Ingredient, pk=ingredient_data['id']
             )
-            RecipeIngredient.objects.create(
-                recipe=recipe, ingredient=ingredient,
-                amount=ingredient_data['amount']
+            recipe_ingredients.append(
+                RecipeIngredient(
+                    recipe=recipe,
+                    ingredient=ingredient,
+                    amount=ingredient_data['amount']
+                )
             )
+
+        RecipeIngredient.objects.bulk_create(recipe_ingredients)
 
         for tag in tags_data:
             recipe.tags.add(tag)
@@ -181,14 +199,21 @@ class RecipeSerializer(serializers.ModelSerializer):
                     recipe=instance, ingredient=current_ingredient
                 ).delete()
 
+            recipe_ingredients = []
+
             for ingredient_data in ingredients_data:
-                ingredient = Ingredient.objects.get(
-                    pk=ingredient_data['id']
+                ingredient = get_object_or_404(
+                    Ingredient, pk=ingredient_data['id']
                 )
-                RecipeIngredient.objects.create(
-                    recipe=instance, ingredient=ingredient,
-                    amount=ingredient_data['amount']
+                recipe_ingredients.append(
+                    RecipeIngredient(
+                        recipe=instance,
+                        ingredient=ingredient,
+                        amount=ingredient_data['amount']
+                    )
                 )
+
+            RecipeIngredient.objects.bulk_create(recipe_ingredients)
 
         if tags_data is not None:
             instance.tags.set(tags_data)
@@ -197,37 +222,33 @@ class RecipeSerializer(serializers.ModelSerializer):
         return instance
 
 
-class ReadOnlyRecipeSerializer(serializers.ModelSerializer):
+class FavoriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = (
-            'id', 'name', 'image', 'cooking_time',
+            'user', 'recipe',
         )
-        read_only_fields = (
-            'id', 'name', 'image', 'cooking_time',
+        model = Favorite
+        validators = (
+            UniqueTogetherValidator(
+                queryset=Favorite.objects.all(),
+                fields=('user', 'recipe',),
+                message='Recipe is already in favorites.',
+            ),
         )
-        model = Recipe
 
 
-class FollowingUserSerializer(UserSerializer):
-    recipes = serializers.SerializerMethodField()
-    recipes_count = serializers.ReadOnlyField(source='recipes.count')
+class ShoppingCartSerializer(serializers.ModelSerializer):
 
-    class Meta(UserSerializer.Meta):
+    class Meta:
         fields = (
-            'id', 'username', 'password', 'email',
-            'first_name', 'last_name', 'is_subscribed',
-            'recipes', 'recipes_count',
+            'user', 'recipe',
         )
-
-    def get_recipes(self, obj):
-        request = self.context['request']
-        recipes_limit = request.query_params.get('recipes_limit')
-
-        recipes = obj.recipes.all()
-
-        if recipes_limit is not None and recipes_limit.isnumeric():
-            recipes = recipes[:int(recipes_limit)]
-
-        serializer = ReadOnlyRecipeSerializer(instance=recipes, many=True)
-        return serializer.data
+        model = ShoppingCart
+        validators = (
+            UniqueTogetherValidator(
+                queryset=ShoppingCart.objects.all(),
+                fields=('user', 'recipe',),
+                message='Recipe is already in shopping cart.',
+            ),
+        )
