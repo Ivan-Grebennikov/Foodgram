@@ -3,9 +3,6 @@ version: '3.8'
 services:
   frontend:
     image: manul95/foodgram-frontend:master
-    # build:
-    #   context: ../frontend
-    #   dockerfile: Dockerfile
     volumes:
       - frontend_vol:/app/result_build/build/
 
@@ -13,16 +10,13 @@ services:
     image: postgres:13.0-alpine
     restart: always
     volumes:
-      - /var/lib/postgresql/data/
+      - db_vol:/var/lib/postgresql/data/
     env_file:
       - ./.env
 
   backend:
     image: manul95/foodgram-backend:master
     restart: always
-    # build:
-    #   context: ../backend
-    #   dockerfile: Dockerfile
     volumes:
       - ../data/:/data/
       - static_vol:/app/static/
@@ -48,6 +42,9 @@ services:
       - backend
 
 volumes:
+  db_vol:
+  frontend_vol:
   static_vol:
   media_vol:
-  frontend_vol:
+  
+  
