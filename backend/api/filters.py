@@ -9,7 +9,7 @@ class RecipesFilter(filters.FilterSet):
     is_in_shopping_cart = filters.BooleanFilter()
     author = filters.NumberFilter(
         'author__id',
-        lookup_expr='iexact'
+        lookup_expr='exact'
     )
     tags = filters.ModelMultipleChoiceFilter(
         field_name='tags__slug',

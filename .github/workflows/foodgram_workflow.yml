@@ -1,4 +1,4 @@
-name: YaMDb workflow
+name: Foodgram workflow
 
 on: [push, workflow_dispatch]
 
