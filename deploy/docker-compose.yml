@@ -7,7 +7,7 @@ services:
       - ./frontend:/app/result_build/
 
   db:
-    image: postgres:latest
+    image: postgres:15.1
     restart: always
     volumes:
       - db_vol:/var/lib/postgresql/data/
@@ -27,7 +27,7 @@ services:
       - ./.env
 
   nginx:
-    image: nginx:latest
+    image: nginx:stable
     restart: always
     ports:
       - 80:80
@@ -46,7 +46,7 @@ services:
       - backend
   
   certbot:
-    image: certbot/certbot:latest
+    image: certbot/certbot:v2.0.0
     volumes:
       - ./certbot/www/:/var/www/certbot/
       - ./certbot/conf/:/etc/letsencrypt/
@@ -55,5 +55,3 @@ volumes:
   db_vol:
   static_vol:
   media_vol:
-  
-  

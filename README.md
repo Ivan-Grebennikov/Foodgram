@@ -1,20 +1,21 @@
 <div align="left">
 
 [![Foodgram workflow](https://github.com/Ivan-Grebennikov/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)](https://github.com/Ivan-Grebennikov/foodgram-project-react/actions)
-[![Deployed service link](https://img.shields.io/badge/Service-deployed-green.svg)](https://foodgram.ddnsking.com)
+[![Foodgram website link](https://img.shields.io/badge/Foodgram%20website-deployed-green.svg)](https://foodgram.ddnsking.com)
+[![Foodgram admin link](https://img.shields.io/badge/Foodgram%20admin-deployed-green.svg)](https://foodgram.ddnsking.com/admin)
 
 </div>
 
 <div align="left">
 
-[![Django](https://img.shields.io/badge/-Django-464646?style=flat-square&logo=Django)](https://www.djangoproject.com/)
-[![Django REST Framework](https://img.shields.io/badge/-Django%20REST%20Framework-464646?style=flat-square&logo=Django%20REST%20Framework)](https://www.django-rest-framework.org/)
-[![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-464646?style=flat-square&logo=PostgreSQL)](https://www.postgresql.org/)
-[![Nginx](https://img.shields.io/badge/-NGINX-464646?style=flat-square&logo=NGINX)](https://nginx.org/ru/)
-[![Gunicorn](https://img.shields.io/badge/-gunicorn-464646?style=flat-square&logo=gunicorn)](https://gunicorn.org/)
-[![Docker](https://img.shields.io/badge/-Docker-464646?style=flat-square&logo=docker)](https://www.docker.com/)
-[![GitHub Actions](https://img.shields.io/badge/-GitHub%20Actions-464646?style=flat-square&logo=GitHub%20actions)](https://github.com/features/actions)
-[![Yandex.Cloud](https://img.shields.io/badge/-Yandex.Cloud-464646?style=flat-square&logo=Yandex.Cloud)](https://cloud.yandex.ru/)
+[![Django](https://img.shields.io/badge/Django-grey?style=flat-square&logo=Django)](https://www.djangoproject.com/)
+[![Django REST Framework](https://img.shields.io/badge/Django%20REST%20Framework-grey?style=flat-square&logo=Django%20REST%20Framework)](https://www.django-rest-framework.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-grey?style=flat-square&logo=PostgreSQL)](https://www.postgresql.org/)
+[![Nginx](https://img.shields.io/badge/NGINX-grey?style=flat-square&logo=NGINX)](https://nginx.org/ru/)
+[![Gunicorn](https://img.shields.io/badge/Gunicorn-grey?style=flat-square&logo=gunicorn)](https://gunicorn.org/)
+[![Docker](https://img.shields.io/badge/Docker-grey?style=flat-square&logo=docker)](https://www.docker.com/)
+[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-grey?style=flat-square&logo=GitHub%20Actions)](https://github.com/features/actions)
+[![Yandex.Cloud](https://img.shields.io/badge/Yandex.Cloud-grey?style=flat-square&logo=Yandex.Cloud)](https://cloud.yandex.ru/)
 
 </div>
 
