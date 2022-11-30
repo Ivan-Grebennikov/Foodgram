@@ -71,6 +71,7 @@ POSTGRES_PASSWORD=postgres # set database server password (mandatory to change)
 POSTGRES_DB=postgres # set database name (changeable)
 DB_HOST=db # the name of database Docker container
 DB_PORT=5432 # default PostgreSQL server port
+WAIT_HOSTS=db:5432 # internal containers synchronization during startup
 ```
 
 In ``` DEBUG=True ``` mode the project will use the SQLite database, regardless of the other settings.
