@@ -20,7 +20,7 @@
 
 ## Foodgram service
 
-This is **Foodgram**, your smart food recipes organizer!
+This is **Foodgram**, your smart food recipes organizer! :spaghetti::green_salad::sandwich:
 
 This service may help you to find some tasty recipes, published by the community. You can add the most interesting ones in favourites and even create a shopping cart which will help you not to get lost in the market. Feel free to share you recipes with the community and subscribe to other users' dishy updates!
 
