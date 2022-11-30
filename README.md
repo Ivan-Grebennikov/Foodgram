@@ -116,7 +116,7 @@ To start the service again:
 sudo docker compose up
 ```
 
-### API
+## API
 
 There is a REST API to work with the service.
 
