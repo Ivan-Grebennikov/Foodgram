@@ -2,7 +2,6 @@
 
 [![Foodgram workflow](https://github.com/Ivan-Grebennikov/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)](https://github.com/Ivan-Grebennikov/foodgram-project-react/actions)
 [![Foodgram website link](https://img.shields.io/badge/Foodgram%20-website-green.svg)](https://foodgram.ddnsking.com)
-[![Foodgram admin link](https://img.shields.io/badge/Foodgram%20-admin-green.svg)](https://foodgram.ddnsking.com/admin)
 
 </div>
 
